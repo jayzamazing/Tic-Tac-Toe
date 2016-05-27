@@ -1,5 +1,5 @@
 * {
-  outline: red 1px solid;
+  /*outline: red 1px solid;*/
 }
 html {
   box-sizing: border-box;
@@ -8,6 +8,8 @@ html {
 }
 .boardTop div, .boardCenter div, .boardBottom div, .talliesBoard div{
   height: 5rem;
+  padding-left: 2.5rem;
+  padding-top: .5rem;
 }
 .boardTopMiddle, .boardCenterMiddle, .boardBottomMiddle {
   border-left: 5px solid black;
