@@ -1,9 +1,18 @@
 $(document).ready(function() {
     var currentGame = newGame();
+    /*
+    * Function that deals with click events on the board
+    */
     $('.ticTacToeBoard').click(function(event) {
         var element = event.target;
         var boardClass = $.trim(element.className.substr(element.className.lastIndexOf(' ')));
         xOrO(element, boardClass);
+    });
+    /*
+    * Function that deals with restarting the game
+    */
+    $('.newGame').click(function(event) {
+      currentGame = newGame();
     });
     /*
      * Function to set a tile as either x or o
@@ -15,15 +24,16 @@ $(document).ready(function() {
             if (playerTurn === 1) {
               $(element).append('<i class="fa fa-times fa-3x" aria-hidden="true">');
               currentGame.setTile(currentGame.getTileIndex(boardClass));
-              currentGame.setTurn();
             } else {
               $(element).append('<i class="fa fa-circle-o fa-3x" aria-hidden="true">');
               currentGame.setTile(currentGame.getTileIndex(boardClass));
-              currentGame.setTurn();
             }
+            //if there is a winner in vertical, diagonal, or horizontal
             if (currentGame.checkVertical() || currentGame.checkDiagonal() || currentGame.checkHorizontal()) {
                 currentGame.endGame();
+                
             }
+            currentGame.setTurn();
         }
     }
 
@@ -51,6 +61,8 @@ function Game() {
     ];
     this.turn = 0;
     this.gameStatus = 0;
+    this.xWins = 0;
+    this.yWIns = 0;
 }
 /*
 * Function to set game status
