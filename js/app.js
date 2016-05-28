@@ -9,28 +9,22 @@ $(document).ready(function() {
      * Function to set a tile as either x or o
      */
     function xOrO(element, boardClass) {
-        var playerTurn = turn(currentGame);
-        var tileStatus = tiles(boardClass, currentGame);
-        if (getGameStatus(currentGame) === 1 && tileStatus === 0) { //check that tile hasn't been selected previously
+        var playerTurn = currentGame.getTurn();
+        var tileStatus = currentGame.getTile(currentGame.getTileIndex(boardClass));
+        if (currentGame.getGameStatus() === 1 && tileStatus === 0) { //check that tile hasn't been selected previously
             if (playerTurn === 1) {
-                setX(element, boardClass);
+              $(element).append('<i class="fa fa-times fa-3x" aria-hidden="true">');
+              currentGame.setTile(currentGame.getTileIndex(boardClass));
+              currentGame.setTurn();
             } else {
-                setY(element, boardClass);
+              $(element).append('<i class="fa fa-circle-o fa-3x" aria-hidden="true">');
+              currentGame.setTile(currentGame.getTileIndex(boardClass));
+              currentGame.setTurn();
             }
-            if (checkWinner(currentGame)) {
-                setGameOver(currentGame);
+            if (currentGame.checkVertical() || currentGame.checkDiagonal() || currentGame.checkHorizontal()) {
+                currentGame.endGame();
             }
         }
-    }
-
-    function setX(element, boardClass) {
-        $(element).append('<i class="fa fa-times fa-3x" aria-hidden="true">');
-        setBoard(boardClass, currentGame);
-    }
-
-    function setY(element, boardClass) {
-        $(element).append('<i class="fa fa-circle-o fa-3x" aria-hidden="true">');
-        setBoard(boardClass, currentGame);
     }
 
 });
@@ -42,34 +36,6 @@ function newGame() {
     game.startingPlayer();
     game.startGame();
     return game;
-}
-
-function checkWinner(currentGame) {
-    if (currentGame.checkVertical() || currentGame.checkDiagonal() || currentGame.checkHorizontal()) {
-        return 1;
-    } else
-        return 0;
-}
-
-function getGameStatus(currentGame) {
-    return currentGame.getGameStatus();
-}
-
-function setGameOver(currentGame) {
-    currentGame.endGame();
-}
-
-function setBoard(boardClass, currentGame) {
-    currentGame.setTile(currentGame.getTileIndex(boardClass));
-    currentGame.setTurn();
-}
-
-function turn(currentGame) {
-    return currentGame.getTurn();
-}
-
-function tiles(boardClass, currentGame) {
-    return currentGame.getTile(currentGame.getTileIndex(boardClass));
 }
 /*
  * Used to keep track of the board
@@ -86,12 +52,21 @@ function Game() {
     this.turn = 0;
     this.gameStatus = 0;
 }
+/*
+* Function to set game status
+*/
 Game.prototype.startGame = function() {
     this.gameStatus = 1;
 };
+/*
+* Function to get the game stus
+*/
 Game.prototype.getGameStatus = function() {
     return this.gameStatus;
 };
+/*
+* Function to change the game status to end the game
+*/
 Game.prototype.endGame = function() {
     this.gameStatus = 0;
 };
@@ -107,6 +82,9 @@ Game.prototype.setTile = function(index) {
 Game.prototype.getTile = function(index) {
     return this.board[index];
 };
+/*
+* Function returns index of the associated board section
+*/
 Game.prototype.getTileIndex = function(tileName) {
     switch (tileName) {
         case 'boardTopLeft':
@@ -152,6 +130,9 @@ Game.prototype.setTurn = function() {
         this.turn = 1;
     }
 };
+/*
+* Checks the vertical sections of the board to determine if there is a winner
+*/
 Game.prototype.checkVertical = function() {
     var check = 0;
     for (i = 0; i < 3; i += 1) {
@@ -161,6 +142,9 @@ Game.prototype.checkVertical = function() {
     }
     return 0;
 };
+/*
+* Checks the diagonal sections of the board to determine if there is a winner
+*/
 Game.prototype.checkDiagonal = function() {
     var check = 0,
         check2 = 0;
@@ -172,6 +156,9 @@ Game.prototype.checkDiagonal = function() {
         return 0;
 
 };
+/*
+* Checks the horizontal sections of the board to determine if there is a winner
+*/
 Game.prototype.checkHorizontal = function() {
     var check = 0;
     for (i = 0; i < this.board.length; i += 3) {
@@ -185,7 +172,7 @@ Game.prototype.checkHorizontal = function() {
  * Returns if there is a 1 if winner or 0 if not
  */
 function isWinner(check, value1, value2, value3) {
-    if (value1 === value2 && value2 === value3) {
+    if (value1 === value2 && value2 === value3) { //ensures values are all the same item
         if (check === 3 || check === 6) {
             return 1;
         } else
