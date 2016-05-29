@@ -1,0 +1,10 @@
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['tictactoe'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return "<div class=\"ticTacToeBoard\" id=\""
+    + container.escapeExpression(((helper = (helper = helpers.boardName || (depth0 != null ? depth0.boardName : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"boardName","hash":{},"data":data}) : helper)))
+    + "\">\n  <div class=\"row\">\n    <div class=\"input-group col-sm-3 col-md-3 col-lg-3\">\n      <input type=\"text\" class=\"form-control x-wins\" readonly=\"true\">\n      <input type=\"text\" class=\"form-control o-wins\" readonly=\"true\">\n      <input type=\"text\" class=\"form-control player-turn\" readonly=\"true\">\n      <div class=\"input-group-btn\">\n        <button class=\"clearWins btn btn-default btn-primary\">Clear Wins</button>\n        <button class=\"newBoard btn btn-default btn-primary\">New Board</button>\n        <button class=\"newGame btn btn-default btn-primary\">New Game</button>\n      </div>\n    </div>\n  </div>\n  <div class=\"row boardTop\">\n    <div class=\"col-sm-1 col-md-1 col-lg-1 boardTopLeft\"></div>\n    <div class=\"col-sm-1 col-md-1 col-lg-1 boardTopMiddle\"></div>\n    <div class=\"col-sm-1 col-md-1 col-lg-1 boardTopRight\"></div>\n  </div>\n  <div class=\"row boardCenter\">\n    <div class=\"col-sm-1 col-md-1 col-lg-1 boardCenterLeft\"></div>\n    <div class=\"col-sm-1 col-md-1 col-lg-1 boardCenterMiddle\"></div>\n    <div class=\"col-sm-1 col-md-1 col-lg-1 boardCenterRight\"></div>\n  </div>\n  <div class=\"row boardBottom\">\n    <div class=\"col-sm-1 col-md-1 col-lg-1 boardBottomLeft\"></div>\n    <div class=\"col-sm-1 col-md-1 col-lg-1 boardBottomMiddle\"></div>\n    <div class=\"col-sm-1 col-md-1 col-lg-1 boardBottomRight\"></div>\n  </div>\n</div>\n";
+},"useData":true});
+})();
