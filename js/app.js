@@ -1,6 +1,7 @@
 $(document).ready(function() {
     var currentGame = newGame();
     whoseTurn(currentGame.getTurn());
+    $('section').append(addBoard('board1'));
     /*
     * Function that deals with click events on the board
     */
@@ -81,7 +82,18 @@ $(document).ready(function() {
       $('.boardCenter div').empty();
       $('.boardBottom div').empty();
     }
-
+    /*
+    * Function to get handlebar template for insertion
+    */
+    function addBoard(name) {
+        // Get handlebar template
+        var template = Handlebars.templates.tictactoe;
+        //set all the handlebar contents
+        var context = {boardName: name};
+        //add the contents to the template
+        var result = template(context);
+        return result;
+    }
 });
 /*
  * Used to reset the game back to its initial state
