@@ -1,18 +1,20 @@
 * {
-  outline: red 1px solid;
+  /*outline: red 1px solid;*/
 }
 html {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-.nopadding {
-   padding: 0 !important;
-   margin: 0 !important;
-}
-.clearWins, .newGame {
+.clearWins, .newBoard, .newGame {
   display: block;
   width: 100%;
+}
+.x-wins, .o-wins, .player-turn {
+  text-align: center;
+}
+.boardTop, .ticTacToeBoard {
+  margin-top: 2rem;
 }
 .boardTop div, .boardCenter div, .boardBottom div, .talliesBoard div{
   height: 5rem;

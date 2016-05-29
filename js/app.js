@@ -1,5 +1,6 @@
 $(document).ready(function() {
     var currentGame = newGame();
+    whoseTurn(currentGame.getTurn());
     /*
     * Function that deals with click events on the board
     */
@@ -12,6 +13,13 @@ $(document).ready(function() {
     * Function that deals with restarting the game
     */
     $('.newGame').click(function(event) {
+      resetGame(currentGame);
+      resetBoard();
+    });
+    /*
+    * Function to start new game clearing all win history
+    */
+    $('.clearWins').click(function(event) {
       currentGame = newGame();
     });
     /*
@@ -27,14 +35,50 @@ $(document).ready(function() {
             } else {
               $(element).append('<i class="fa fa-circle-o fa-3x" aria-hidden="true">');
               currentGame.setTile(currentGame.getTileIndex(boardClass));
+
             }
             //if there is a winner in vertical, diagonal, or horizontal
             if (currentGame.checkVertical() || currentGame.checkDiagonal() || currentGame.checkHorizontal()) {
                 currentGame.endGame();
-                
+                displayWinner(currentGame.getTurn());
             }
-            currentGame.setTurn();
+            if (currentGame.getGameStatus() === 1) {
+              currentGame.setTurn();
+              whoseTurn(currentGame.getTurn());
+            }
         }
+    }
+    /*
+    * Function to show the players turn
+    */
+    function whoseTurn(playerTurn) {
+      if (playerTurn === 1){
+        $('.player-turn').val("Player X turn");
+      } else {
+        $('.player-turn').val("Player O turn");
+      }
+    }
+    /*
+    * Function to display winner
+    */
+    function displayWinner(playerTurn) {
+      if (playerTurn === 1){
+        $('.player-turn').val('Player X Wins');
+        currentGame.setXWin();
+        $('.x-wins').val('X wins: ' + currentGame.getXWin());
+      } else {
+        $('.player-turn').val('Player O Wins');
+        currentGame.setOWin();
+        $('.o-wins').val('O wins: ' + currentGame.getOWin());
+      }
+    }
+    /*
+    * Function to clear out the board
+    */
+    function resetBoard() {
+      $('.boardTop div').empty();
+      $('.boardCenter div').empty();
+      $('.boardBottom div').empty();
     }
 
 });
@@ -46,6 +90,11 @@ function newGame() {
     game.startingPlayer();
     game.startGame();
     return game;
+}
+function resetGame(game) {
+  game.startingPlayer();
+  game.startGame();
+  game.resetTiles();
 }
 /*
  * Used to keep track of the board
@@ -62,8 +111,32 @@ function Game() {
     this.turn = 0;
     this.gameStatus = 0;
     this.xWins = 0;
-    this.yWIns = 0;
+    this.oWins = 0;
 }
+/*
+* Function to increment x wins
+*/
+Game.prototype.setXWin = function() {
+  this.xWins++;
+};
+/*
+* Function to increment O wins
+*/
+Game.prototype.setOWin = function() {
+  this.oWins++;
+};
+/*
+* Function to get x wins
+*/
+Game.prototype.getXWin = function() {
+  return this.xWins;
+};
+/*
+* Function to get o wins
+*/
+Game.prototype.getOWin = function() {
+  return this.oWins;
+};
 /*
 * Function to set game status
 */
@@ -93,6 +166,12 @@ Game.prototype.setTile = function(index) {
  */
 Game.prototype.getTile = function(index) {
     return this.board[index];
+};
+/*
+* Function to reset board
+*/
+Game.prototype.resetTiles = function() {
+  this.board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 };
 /*
 * Function returns index of the associated board section
