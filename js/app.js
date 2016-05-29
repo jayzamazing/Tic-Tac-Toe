@@ -5,9 +5,10 @@ $(document).ready(function() {
     * Function that deals with click events on the board
     */
     $('.ticTacToeBoard').click(function(event) {
-        var element = event.target;
-        var boardClass = $.trim(element.className.substr(element.className.lastIndexOf(' ')));
-        xOrO(element, boardClass);
+      var element = event.target;
+      var parentId = this.id;
+      var boardClass = $.trim(element.className.substr(element.className.lastIndexOf(' ')));
+      xOrO(element, boardClass);
     });
     /*
     * Function that deals with restarting the game
@@ -271,3 +272,21 @@ function isWinner(check, value1, value2, value3) {
     }
     return 0;
 }
+/*
+* Map holding games
+*/
+function MapOfGames() {
+  this.games = new Map();
+}
+/*
+* Function to add games to map
+*/
+MapOfGames.prototype.addGame = function(name) {
+  this.games.set(name, new Game());
+};
+/*
+* Return specific game
+*/
+MapOfGames.prototype.findGame = function(name) {
+  return this.games.get(name);
+};
