@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var currentGame = newGame();
-    whoseTurn(currentGame.getTurn());
     $('section').append(addBoard('board1'));
+    whoseTurn(currentGame.getTurn());
     /*
     * Function that deals with click events on the board
     */
@@ -16,13 +16,18 @@ $(document).ready(function() {
     */
     $('.newGame').click(function(event) {
       resetGame(currentGame);
+      resetPlayer(currentGame);
       resetBoard();
+      whoseTurn(currentGame.getTurn());
     });
     /*
     * Function to start new game clearing all win history
     */
     $('.clearWins').click(function(event) {
       currentGame = newGame();
+      resetTallies();
+      whoseTurn(currentGame.getTurn());
+      resetBoard();
     });
     /*
      * Function to set a tile as either x or o
@@ -83,6 +88,14 @@ $(document).ready(function() {
       $('.boardBottom div').empty();
     }
     /*
+    * Function to reset tallies board
+    */
+    function resetTallies() {
+      $('.x-wins').val('');
+      $('.o-wins').val('');
+      $('.player-turn').val('');
+    }
+    /*
     * Function to get handlebar template for insertion
     */
     function addBoard(name) {
@@ -104,10 +117,19 @@ function newGame() {
     game.startGame();
     return game;
 }
+/*
+* Used to reset game without starting a new game
+*/
 function resetGame(game) {
   game.startingPlayer();
   game.startGame();
   game.resetTiles();
+}
+/*
+* Used to reset starting player only
+*/
+function resetPlayer(game) {
+  game.startingPlayer();
 }
 /*
  * Used to keep track of the board
