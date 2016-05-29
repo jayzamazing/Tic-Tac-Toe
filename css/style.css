@@ -16,6 +16,9 @@ html {
 .boardTop, .ticTacToeBoard {
   margin-top: 2rem;
 }
+.ticTacToeBoard {
+  float: none;
+}
 .boardTop div, .boardCenter div, .boardBottom div, .talliesBoard div{
   height: 5rem;
   padding-left: 2.5rem;
