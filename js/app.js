@@ -2,42 +2,47 @@ $(document).ready(function() {
   var gamesMap = new MapOfGames();
     var currentGame = newGame(gamesMap, 'board1');
     $('section').append(addBoard('board1'));
-    whoseTurn(currentGame.getTurn());
+    whoseTurn('board1', currentGame.getTurn());
     /*
     * Function that deals with click events on the board
     */
-    $('.ticTacToeBoard').click(function(event) {
+    $('section').on('click', '.ticTacToeBoard', function(event) {
       var element = event.target;
       var parentId = $(this).attr('id');
       var boardClass = $.trim(element.className.substr(element.className.lastIndexOf(' ')));
       currentGame = gamesMap.findGame(parentId);
-      xOrO(currentGame, element, boardClass);
+      xOrO(currentGame, parentId, element, boardClass);
     });
     /*
     * Function that deals with restarting the game
     */
-    $('.newGame').click(function(event) {
-      var parentId = $('.ticTacToeBoard').attr('id');
+    $('section').on('click', '.newGame', function() {
+      var parentId = $(this).parents('.ticTacToeBoard').attr('id');
       currentGame = gamesMap.findGame(parentId);
       resetGame(currentGame);
       resetPlayer(currentGame);
-      resetBoard();
-      whoseTurn(currentGame.getTurn());
+      resetBoard(parentId);
+      whoseTurn(parentId, currentGame.getTurn());
     });
     /*
     * Function to start new game clearing all win history
     */
-    $('.clearWins').click(function(event) {//TODO
-      var parentId = this.id;
-      currentGame = newGame(gamesMap, 'board1');
-      resetTallies();
-      whoseTurn(currentGame.getTurn());
-      resetBoard();
+    $('section').on('click', '.clearWins', function() {
+      var parentId = $(this).parents('.ticTacToeBoard').attr('id');
+      currentGame = newGame(gamesMap, parentId);
+      resetTallies(parentId);
+      whoseTurn(parentId, currentGame.getTurn());
+      resetBoard(parentId);
+    });
+    $('section').on('click', '.newBoard', function() {
+      var boardName = 'board' + (gamesMap.getGameCount() + 1);
+      var currentGame = newGame(gamesMap, boardName);
+      $('section').append(addBoard(boardName));
     });
     /*
      * Function to set a tile as either x or o
      */
-    function xOrO(currentGame, element, boardClass) {
+    function xOrO(currentGame, parentId, element, boardClass) {
         var playerTurn = currentGame.getTurn();
         var tileStatus = currentGame.getTile(currentGame.getTileIndex(boardClass));
         if (currentGame.getGameStatus() === 1 && tileStatus === 0) { //check that tile hasn't been selected previously
@@ -52,53 +57,53 @@ $(document).ready(function() {
             //if there is a winner in vertical, diagonal, or horizontal
             if (currentGame.checkVertical() || currentGame.checkDiagonal() || currentGame.checkHorizontal()) {
                 currentGame.endGame();
-                displayWinner(currentGame.getTurn());
+                displayWinner(currentGame, parentId, currentGame.getTurn());
             }
             if (currentGame.getGameStatus() === 1) {
               currentGame.setTurn();
-              whoseTurn(currentGame.getTurn());
+              whoseTurn(parentId, currentGame.getTurn());
             }
         }
     }
     /*
     * Function to show the players turn
     */
-    function whoseTurn(playerTurn) {
+    function whoseTurn(parentId, playerTurn) {
       if (playerTurn === 1){
-        $('.player-turn').val("Player X turn");
+        $('#' + parentId + ' .player-turn').val("Player X turn");
       } else {
-        $('.player-turn').val("Player O turn");
+        $('#' + parentId + ' .player-turn').val("Player O turn");
       }
     }
     /*
     * Function to display winner
     */
-    function displayWinner(playerTurn) {
+    function displayWinner(currentGame, parentId, playerTurn) {
       if (playerTurn === 1){
-        $('.player-turn').val('Player X Wins');
+        $('#' + parentId + ' .player-turn').val('Player X Wins');
         currentGame.setXWin();
-        $('.x-wins').val('X wins: ' + currentGame.getXWin());
+        $('#' + parentId + ' .x-wins').val('X wins: ' + currentGame.getXWin());
       } else {
-        $('.player-turn').val('Player O Wins');
+        $('#' + parentId + ' .player-turn').val('Player O Wins');
         currentGame.setOWin();
-        $('.o-wins').val('O wins: ' + currentGame.getOWin());
+        $('#' + parentId + ' .o-wins').val('O wins: ' + currentGame.getOWin());
       }
     }
     /*
     * Function to clear out the board
     */
-    function resetBoard() {
-      $('.boardTop div').empty();
-      $('.boardCenter div').empty();
-      $('.boardBottom div').empty();
+    function resetBoard(parentId) {
+      $('#' + parentId + ' .boardTop div').empty();
+      $('#' + parentId + ' .boardCenter div').empty();
+      $('#' + parentId + ' .boardBottom div').empty();
     }
     /*
     * Function to reset tallies board
     */
-    function resetTallies() {
-      $('.x-wins').val('');
-      $('.o-wins').val('');
-      $('.player-turn').val('');
+    function resetTallies(parentId) {
+      $('#' + parentId + ' .x-wins').val('');
+      $('#' + parentId + ' .o-wins').val('');
+      $('#' + parentId + ' .player-turn').val('');
     }
     /*
     * Function to get handlebar template for insertion
@@ -324,6 +329,7 @@ function MapOfGames() {
 */
 MapOfGames.prototype.addGame = function(name) {
   this.games.set(name, new Game());
+  this.gameCount++;
 };
 /*
 * Return specific game
@@ -333,7 +339,4 @@ MapOfGames.prototype.findGame = function(name) {
 };
 MapOfGames.prototype.getGameCount = function() {
   return this.gameCount;
-};
-MapOfGames.prototype.setGameCount = function() {
-  this.gameCount++;
 };

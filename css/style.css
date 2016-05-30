@@ -1,11 +1,12 @@
 * {
   /*outline: red 1px solid;*/
 }
-html {
+html, section {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
+
 .clearWins, .newBoard, .newGame {
   display: block;
   width: 100%;
@@ -17,7 +18,7 @@ html {
   margin-top: 2rem;
 }
 .ticTacToeBoard {
-  float: none;
+  border: 1px solid blue;
 }
 .boardTop div, .boardCenter div, .boardBottom div, .talliesBoard div{
   height: 5rem;
