@@ -38,6 +38,7 @@ $(document).ready(function() {
       var boardName = 'board' + (gamesMap.getGameCount() + 1);
       var currentGame = newGame(gamesMap, boardName);
       $('section').append(addBoard(boardName));
+      whoseTurn(boardName, currentGame.getTurn());
     });
     /*
      * Function to set a tile as either x or o
