@@ -10,7 +10,8 @@ $(document).ready(function() {
       var element = event.target;
       var parentId = this.id;
       var boardClass = $.trim(element.className.substr(element.className.lastIndexOf(' ')));
-      xOrO(element, boardClass);
+      currentGame = gamesMap.findGame(parentId);
+      xOrO(currentGame, element, boardClass);
     });
     /*
     * Function that deals with restarting the game
@@ -33,7 +34,7 @@ $(document).ready(function() {
     /*
      * Function to set a tile as either x or o
      */
-    function xOrO(element, boardClass) {
+    function xOrO(currentGame, element, boardClass) {
         var playerTurn = currentGame.getTurn();
         var tileStatus = currentGame.getTile(currentGame.getTileIndex(boardClass));
         if (currentGame.getGameStatus() === 1 && tileStatus === 0) { //check that tile hasn't been selected previously
