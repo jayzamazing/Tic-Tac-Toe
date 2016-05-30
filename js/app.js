@@ -8,7 +8,7 @@ $(document).ready(function() {
     */
     $('.ticTacToeBoard').click(function(event) {
       var element = event.target;
-      var parentId = this.id;
+      var parentId = $(this).attr('id');
       var boardClass = $.trim(element.className.substr(element.className.lastIndexOf(' ')));
       currentGame = gamesMap.findGame(parentId);
       xOrO(currentGame, element, boardClass);
@@ -17,6 +17,8 @@ $(document).ready(function() {
     * Function that deals with restarting the game
     */
     $('.newGame').click(function(event) {
+      var parentId = $('.ticTacToeBoard').attr('id');
+      currentGame = gamesMap.findGame(parentId);
       resetGame(currentGame);
       resetPlayer(currentGame);
       resetBoard();
@@ -25,8 +27,9 @@ $(document).ready(function() {
     /*
     * Function to start new game clearing all win history
     */
-    $('.clearWins').click(function(event) {
-      currentGame = newGame();
+    $('.clearWins').click(function(event) {//TODO
+      var parentId = this.id;
+      currentGame = newGame(gamesMap, 'board1');
       resetTallies();
       whoseTurn(currentGame.getTurn());
       resetBoard();
