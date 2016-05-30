@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    var currentGame = newGame();
+  var gamesMap = new MapOfGames();
+    var currentGame = newGame(gamesMap, 'board1');
     $('section').append(addBoard('board1'));
     whoseTurn(currentGame.getTurn());
     /*
@@ -111,8 +112,9 @@ $(document).ready(function() {
 /*
  * Used to reset the game back to its initial state
  */
-function newGame() {
-    var game = new Game();
+function newGame(gamesMap, gameName) {
+    gamesMap.addGame(gameName);
+    var game = gamesMap.findGame(gameName);
     game.startingPlayer();
     game.startGame();
     return game;
@@ -311,6 +313,7 @@ function isWinner(check, value1, value2, value3) {
 */
 function MapOfGames() {
   this.games = new Map();
+  this.gameCount = 0;
 }
 /*
 * Function to add games to map
@@ -323,4 +326,10 @@ MapOfGames.prototype.addGame = function(name) {
 */
 MapOfGames.prototype.findGame = function(name) {
   return this.games.get(name);
+};
+MapOfGames.prototype.getGameCount = function() {
+  return this.gameCount;
+};
+MapOfGames.prototype.setGameCount = function() {
+  this.gameCount++;
 };
